@@ -25,15 +25,13 @@ void PokemonBST::destroyTree(Node * current)
     }
 }
 
-void PokemonBST::insertPokemon(
-    const Pokemon & pokemon)
+void PokemonBST::insertPokemon(const Pokemon & pokemon)
 {
     insert(root, pokemon);
 }
 
-void PokemonBST::insert(
-    Node *& current,
-    const Pokemon & pokemon)
+void PokemonBST::insert(Node *& current,
+                        const Pokemon & pokemon)
 {
     if (current == NULL)
     {
@@ -44,28 +42,23 @@ void PokemonBST::insert(
         current->left = NULL;
         current->right = NULL;
     }
-    else if (pokemon.getName()
-             < current->data.getName())
+    else if (pokemon.getName() < current->data.getName())
     {
-        insert(current->left,
-               pokemon);
+        insert(current->left, pokemon);
     }
     else
     {
-        insert(current->right,
-               pokemon);
+        insert(current->right, pokemon);
     }
 }
 
-bool PokemonBST::searchPokemon(
-    const string & name) const
+bool PokemonBST::searchPokemon(const string & name) const
 {
     return search(root, name);
 }
 
-bool PokemonBST::search(
-    Node * current,
-    const string & name) const
+bool PokemonBST::search(Node * current,
+                        const string & name) const
 {
     if (current == NULL)
     {
@@ -79,12 +72,36 @@ bool PokemonBST::search(
 
     if (name < current->data.getName())
     {
-        return search(current->left,
-                      name);
+        return search(current->left, name);
     }
 
-    return search(current->right,
-                  name);
+    return search(current->right, name);
+}
+
+Pokemon PokemonBST::getPokemon(const string & name) const
+{
+    return findPokemon(root, name);
+}
+
+Pokemon PokemonBST::findPokemon(Node * current,
+                                const string & name) const
+{
+    if (current == NULL)
+    {
+        return Pokemon();
+    }
+
+    if (name == current->data.getName())
+    {
+        return current->data;
+    }
+
+    if (name < current->data.getName())
+    {
+        return findPokemon(current->left, name);
+    }
+
+    return findPokemon(current->right, name);
 }
 
 void PokemonBST::displayPokemon() const
@@ -92,8 +109,7 @@ void PokemonBST::displayPokemon() const
     displayInOrder(root);
 }
 
-void PokemonBST::displayInOrder(
-    Node * current) const
+void PokemonBST::displayInOrder(Node * current) const
 {
     if (current != NULL)
     {
