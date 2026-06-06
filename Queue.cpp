@@ -1,7 +1,4 @@
-#include <iostream>
 #include "Queue.h"
-
-using namespace std;
 
 Queue::Queue()
 {
@@ -72,4 +69,19 @@ Pokemon Queue::peek() const
     }
 
     return front->data;
+}
+
+int Queue::getSize() const
+{
+    int count = 0;
+
+    Node * current = front;
+
+    while (current != NULL)
+    {
+        count++;
+        current = current->next;
+    }
+
+    return count;
 }
