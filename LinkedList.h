@@ -17,8 +17,6 @@ private:
 
 public:
 
-public:
-
     LinkedList();
 
     ~LinkedList();
