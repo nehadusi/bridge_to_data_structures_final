@@ -17,20 +17,25 @@ private:
 
     Stack battleHistory;
 
-    int calculateDamage(
-        const Pokemon & attacker,
-        const Pokemon & defender);
+    bool lastPlayerWon;
 
-    void recordBattleAction(
-        const string & action);
+    int turnNumber;
+
+    int calculateDamage(const Pokemon & attacker,
+                        const Pokemon & defender);
+
+    void recordBattleAction(const string & action);
+
+    void clearQueue();
 
 public:
 
     BattleSystem();
 
-    void startBattle(
-        Pokemon playerPokemon,
-        Pokemon enemyPokemon);
+    void startBattle(Pokemon playerPokemon,
+                     Pokemon enemyPokemon);
+
+    bool getLastPlayerWon() const;
 
     void displayBattleHistory();
 };
