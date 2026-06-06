@@ -39,14 +39,11 @@ public:
 
     ~PokemonBST();
 
-    void insertPokemon(
-        const Pokemon & pokemon);
+    void insertPokemon(const Pokemon & pokemon);
 
-    bool searchPokemon(
-        const string & name) const;
+    bool searchPokemon(const string & name) const;
 
-    Pokemon getPokemon(
-        const string & name) const;
+    Pokemon getPokemon(const string & name) const;
 
     void displayPokemon() const;
 };
