@@ -1,13 +1,13 @@
 #include "Stack.h"
 
-Stack::Stack
+Stack::Stack()
 {
-    top = NULL; 
+    top = NULL;
 }
 
 Stack::~Stack()
 {
-     Node * current = top;
+    Node * current = top;
     Node * temp = NULL;
 
     while (current != NULL)
@@ -18,6 +18,7 @@ Stack::~Stack()
         delete temp;
     }
 }
+
 bool Stack::isEmpty() const
 {
     return top == NULL;
