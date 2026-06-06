@@ -5,29 +5,32 @@
 
 class Queue
 {
-    private: 
+private:
 
-        struct Node
-        {
-            Pokemon data; 
-            Node * next;
-        };
+    struct Node
+    {
+        Pokemon data;
+        Node * next;
+    };
 
-        Node * front; 
-        Node * rear; 
-    
-    public:
-        Queue(); 
+    Node * front;
+    Node * rear;
 
-        ~Queue();
+public:
 
-        bool isEmpty() const;
+    Queue();
 
-        void enqueue(const Pokemon & pokemon); 
+    ~Queue();
 
-        Pokemon dequeue();
+    bool isEmpty() const;
 
-        Pokemon peek() const; 
+    void enqueue(const Pokemon & pokemon);
+
+    Pokemon dequeue();
+
+    Pokemon peek() const;
+
+    int getSize() const;
 };
 
-#endif 
+#endif
