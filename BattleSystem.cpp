@@ -1,53 +1,187 @@
-#ifndef POKEMON_H
-#define POKEMON_H
-
+#include <iostream>
 #include <string>
+
+#include "BattleSystem.h"
 
 using namespace std;
 
-class Pokemon
+BattleSystem::BattleSystem()
 {
-private:
+    lastPlayerWon = false;
+    turnNumber = 1;
+}
 
-    string name;
-    string type;
+int BattleSystem::calculateDamage(const Pokemon & attacker,
+                                  const Pokemon & defender)
+{
+    int damage = attacker.getAttack() - defender.getDefense();
 
-    int hp;
-    int attack;
-    int defense;
-    int speed;
+    if (damage < 1)
+    {
+        damage = 1;
+    }
 
-    int wins;
-    int medals;
+    return damage;
+}
 
-public:
+void BattleSystem::recordBattleAction(const string & action)
+{
+    battleHistory.push(action);
+}
 
-    Pokemon();
+void BattleSystem::clearQueue()
+{
+    while (!battleQueue.isEmpty())
+    {
+        battleQueue.dequeue();
+    }
+}
 
-    Pokemon(string newName,
-            string newType,
-            int newHp,
-            int newAttack,
-            int newDefense,
-            int newSpeed);
+void BattleSystem::startBattle(Pokemon playerPokemon,
+                               Pokemon enemyPokemon)
+{
+    clearQueue();
 
-    string getName() const;
-    string getType() const;
+    lastPlayerWon = false;
+    turnNumber = 1;
 
-    int getHp() const;
-    int getAttack() const;
-    int getDefense() const;
-    int getSpeed() const;
+    if (playerPokemon.getSpeed() >= enemyPokemon.getSpeed())
+    {
+        battleQueue.enqueue(playerPokemon);
+        battleQueue.enqueue(enemyPokemon);
+    }
+    else
+    {
+        battleQueue.enqueue(enemyPokemon);
+        battleQueue.enqueue(playerPokemon);
+    }
 
-    int getWins() const;
-    int getMedals() const;
+    int playerHp = playerPokemon.getHp();
+    int enemyHp = enemyPokemon.getHp();
 
-    void setHp(int newHp);
+    cout << endl;
+    cout << "Battle Start!" << endl;
 
-    void addWin();
-    void addMedal();
+    cout << playerPokemon.getName()
+         << " VS "
+         << enemyPokemon.getName()
+         << endl;
 
-    void displayPokemon() const;
-};
+    while (playerHp > 0 && enemyHp > 0)
+    {
+        Pokemon attacker = battleQueue.dequeue();
 
-#endif
+        if (attacker.getName() == playerPokemon.getName())
+        {
+            int damage = calculateDamage(playerPokemon,
+                                         enemyPokemon);
+
+            enemyHp = enemyHp - damage;
+
+            string action =
+                "Turn "
+                + to_string(turnNumber)
+                + ": "
+                + playerPokemon.getName()
+                + " attacked "
+                + enemyPokemon.getName()
+                + " for "
+                + to_string(damage)
+                + " damage.";
+
+            recordBattleAction(action);
+
+            cout << action << endl;
+
+            if (enemyHp > 0)
+            {
+                battleQueue.enqueue(playerPokemon);
+            }
+        }
+        else
+        {
+            int damage = calculateDamage(enemyPokemon,
+                                         playerPokemon);
+
+            playerHp = playerHp - damage;
+
+            string action =
+                "Turn "
+                + to_string(turnNumber)
+                + ": "
+                + enemyPokemon.getName()
+                + " attacked "
+                + playerPokemon.getName()
+                + " for "
+                + to_string(damage)
+                + " damage.";
+
+            recordBattleAction(action);
+
+            cout << action << endl;
+
+            if (playerHp > 0)
+            {
+                battleQueue.enqueue(enemyPokemon);
+            }
+        }
+
+        turnNumber++;
+    }
+
+    clearQueue();
+
+    cout << endl;
+
+    if (playerHp > 0)
+    {
+        lastPlayerWon = true;
+
+        cout << playerPokemon.getName()
+             << " wins!"
+             << endl;
+    }
+    else
+    {
+        lastPlayerWon = false;
+
+        cout << enemyPokemon.getName()
+             << " wins!"
+             << endl;
+    }
+}
+
+bool BattleSystem::getLastPlayerWon() const
+{
+    return lastPlayerWon;
+}
+
+void BattleSystem::displayBattleHistory()
+{
+    if (battleHistory.isEmpty())
+    {
+        cout << endl;
+        cout << "No battle history yet." << endl;
+        return;
+    }
+
+    Stack tempStack;
+
+    while (!battleHistory.isEmpty())
+    {
+        tempStack.push(battleHistory.pop());
+    }
+
+    cout << endl;
+    cout << "Battle History" << endl;
+    cout << "--------------" << endl;
+
+    while (!tempStack.isEmpty())
+    {
+        string action = tempStack.pop();
+
+        cout << action << endl;
+
+        battleHistory.push(action);
+    }
+}
