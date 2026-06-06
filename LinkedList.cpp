@@ -7,22 +7,23 @@ using namespace std;
 
 LinkedList::LinkedList()
 {
-    head = NULL; 
+    head = NULL;
 }
 
 LinkedList::~LinkedList()
 {
-    Node * current = head; 
-    Node * temp = NULL; 
+    Node * current = head;
+    Node * temp = NULL;
 
     while (current != NULL)
     {
-        temp = current; 
-        current = current ->next;
-        
+        temp = current;
+        current = current->next;
+
         delete temp;
     }
 }
+
 bool LinkedList::isEmpty() const
 {
     return head == NULL;
@@ -105,8 +106,8 @@ int LinkedList::getSize() const
 
     return count;
 }
-Pokemon LinkedList::getPokemonAt(
-    int position) const
+
+Pokemon LinkedList::getPokemonAt(int position) const
 {
     if (position < 0)
     {
@@ -125,9 +126,32 @@ Pokemon LinkedList::getPokemonAt(
         }
 
         index++;
-
         current = current->next;
     }
 
     return Pokemon();
+}
+
+bool LinkedList::addWinToPokemon(const string & name)
+{
+    Node * current = head;
+
+    while (current != NULL)
+    {
+        if (current->data.getName() == name)
+        {
+            current->data.addWin();
+
+            if (current->data.getWins() % 3 == 0)
+            {
+                current->data.addMedal();
+            }
+
+            return true;
+        }
+
+        current = current->next;
+    }
+
+    return false;
 }
